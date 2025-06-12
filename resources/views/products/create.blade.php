@@ -1,35 +1,45 @@
-@extends('layouts.app')
+@extends('layouts.app') 
 
 @section('content')
-<h1>Add New Product</h1>
+<div class="container">
+    <h1 class="mb-4">Tambah Produk</h1>
 
-<form action="{{ route('products.store') }}" method="POST">
-    @csrf
+    {{-- Form untuk menyimpan produk baru --}}
+    <form action="{{ route('products.store') }}" method="POST">
+        @csrf 
 
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" name="name" id="name" class="form-control" value="{{ old('name') }}" required>
-        @error('name')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
-    </div>
+        {{-- Input nama produk --}}
+        <div class="mb-3">
+            <label for="name" class="form-label">Nama Produk</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
 
-    <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea name="description" id="description" class="form-control">{{ old('description') }}</textarea>
-        @error('description')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
-    </div>
+        {{-- Input deskripsi produk --}}
+        <div class="mb-3">
+            <label for="description" class="form-label">Deskripsi</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+        </div>
 
-    <div class="mb-3">
-        <label for="price" class="form-label">Price (IDR)</label>
-        <input type="number" name="price" id="price" class="form-control" step="1000" value="{{ old('price') }}" required min="0">
-        @error('price')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
-    </div>
-    <x-button type="submit" class="btn-primary">Save Product</x-button>
-    <x-link-button href="{{ route('products.index') }}">Cancel</x-link-button>
-</form>
+        {{-- Input harga produk --}}
+        <div class="mb-3">
+            <label for="price" class="form-label">Harga</label>
+            <input type="number" class="form-control" id="price" name="price" required>
+        </div>
+
+        {{-- Dropdown untuk memilih kategori --}}
+        <div class="mb-3">
+            <label for="category_id" class="form-label">Kategori</label>
+            <select class="form-select" name="category_id" required>
+                <option value="">Pilih Kategori</option>
+                @foreach($categories as $category)
+                    <option value="{{ $category->id }}">{{ $category->name }}</option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Tombol submit dan batal pakai komponen --}}
+        <x-button type="submit">Simpan</x-button>
+        <x-link-button href="{{ route('products.index') }}" class="btn-secondary">Batal</x-link-button>
+    </form>
+</div>
 @endsection

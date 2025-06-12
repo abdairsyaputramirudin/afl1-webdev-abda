@@ -1,36 +1,48 @@
-@extends('layouts.app')
+@extends('layouts.app') 
 
 @section('content')
-<h1>Edit Product</h1>
+<div class="container">
+    <h1 class="mb-4">Edit Produk</h1>
 
-<form action="{{ route('products.update', $product->id) }}" method="POST">
-    @csrf
+    {{-- Form untuk update data produk --}}
+    <form action="{{ route('products.update', $product->id) }}" method="POST">
+        @csrf
 
-    <div class="mb-3">
-        <label for="name" class="form-label">Name</label>
-        <input type="text" name="name" id="name" class="form-control" value="{{ old('name', $product->name) }}" required>
-        @error('name')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
-    </div>
+        {{-- Input nama produk, nilai awal diisi dari data produk --}}
+        <div class="mb-3">
+            <label for="name" class="form-label">Nama Produk</label>
+            <input type="text" class="form-control" id="name" name="name" value="{{ $product->name }}" required>
+        </div>
 
-    <div class="mb-3">
-        <label for="description" class="form-label">Description</label>
-        <textarea name="description" id="description" class="form-control">{{ old('description', $product->description) }}</textarea>
-        @error('description')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
-    </div>
+        {{-- Input deskripsi produk --}}
+        <div class="mb-3">
+            <label for="description" class="form-label">Deskripsi</label>
+            <textarea class="form-control" id="description" name="description" rows="3" required>{{ $product->description }}</textarea>
+        </div>
 
-    <div class="mb-3">
-        <label for="price" class="form-label">Price (IDR)</label>
-        <input type="number" name="price" id="price" class="form-control" step="0.01" value="{{ old('price', $product->price) }}" required min="0">
-        @error('price')
-            <div class="text-danger">{{ $message }}</div>
-        @enderror
-    </div>
+        {{-- Input harga produk --}}
+        <div class="mb-3">
+            <label for="price" class="form-label">Harga</label>
+            <input type="number" class="form-control" id="price" name="price" value="{{ $product->price }}" required>
+        </div>
 
-    <x-button type="submit" class="btn-primary">Update Product</x-button>
-    <x-link-button href="{{ route('products.index') }}">Cancel</x-link-button>
-</form>
+        {{-- Dropdown kategori dengan kategori aktif otomatis terpilih --}}
+        <div class="mb-3">
+            <label for="category_id" class="form-label">Kategori</label>
+            <select class="form-select" name="category_id" required>
+                <option value="">Pilih Kategori</option>
+                @foreach($categories as $category)
+                    {{-- Tandai sebagai terpilih jika cocok dengan category_id produk --}}
+                    <option value="{{ $category->id }}" {{ $product->category_id == $category->id ? 'selected' : '' }}>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+        {{-- Tombol update dan batal pakai komponen --}}
+        <x-button type="submit">Update</x-button>
+        <x-link-button href="{{ route('products.index') }}" class="btn-secondary">Batal</x-link-button>
+    </form>
+</div>
 @endsection

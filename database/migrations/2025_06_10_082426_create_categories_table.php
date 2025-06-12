@@ -9,17 +9,15 @@ return new class extends Migration
 
     public function up(): void
     {
-        Schema::create('products', function (Blueprint $table) {
+        Schema::create('categories', function (Blueprint $table) {
             $table->id(); 
             $table->string('name'); 
-            $table->text('description')->nullable(); 
-            $table->integer('price'); 
-            $table->timestamps(); 
+            $table->timestamps();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('products');
+        Schema::dropIfExists('categories');
     }
 };
