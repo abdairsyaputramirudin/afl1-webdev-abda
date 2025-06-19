@@ -1,4 +1,4 @@
-@extends('layouts.app') 
+@extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -26,7 +26,6 @@
             <select name="category_id" class="form-select">
                 <option value="">Semua Kategori</option>
                 @foreach ($categories as $category)
-                    {{-- Opsi akan terpilih jika sesuai dengan input sebelumnya --}}
                     <option value="{{ $category->id }}" {{ request('category_id') == $category->id ? 'selected' : '' }}>
                         {{ $category->name }}
                     </option>
@@ -68,7 +67,7 @@
                         <p class="card-text"><strong>Harga:</strong> Rp{{ number_format($product->price, 0, ',', '.') }}</p>
                         <p class="card-text"><strong>Kategori:</strong> {{ $product->category->name ?? '-' }}</p>
 
-                        {{-- Tombol detail, edit, dan delete --}}
+                        {{-- Tombol detail, edit, delete --}}
                         <x-link-button href="{{ route('products.show', $product->id) }}" class="btn-sm btn-primary">Detail</x-link-button>
                         <x-link-button href="{{ route('products.edit', $product->id) }}" class="btn-sm btn-warning">Edit</x-link-button>
                         <form action="{{ route('products.destroy', $product->id) }}" method="POST" class="d-inline">
@@ -76,6 +75,17 @@
                             @method('DELETE')
                             <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Yakin hapus produk ini?')">Delete</button>
                         </form>
+
+                        {{-- Tombol Add to Cart, hanya muncul jika sudah login --}}
+                        @auth
+                            <form action="{{ route('cart.add', $product->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                <button type="submit" class="btn btn-success btn-sm">Add to Cart</button>
+                            </form>
+                        @endauth
+                        @guest
+                            <a href="{{ route('login') }}" class="btn btn-outline-primary btn-sm">Login untuk Add to Cart</a>
+                        @endguest
                     </div>
                 </div>
             </div>
@@ -86,6 +96,5 @@
     <div class="mt-4">
         {!! $products->withQueryString()->links('pagination::bootstrap-5') !!}
     </div>
-
 </div>
 @endsection

@@ -1,3 +1,5 @@
+{{--views/products/show.blade.php --}}
+
 @extends('layouts.app')
 
 @section('content')
